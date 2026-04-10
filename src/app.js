@@ -23,6 +23,14 @@ app.use((req, res) => {
   res.status(404).json({ error: `Ruta ${req.method} ${req.path} no encontrada` })
 })
 
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).json({
+    error: 'Error interno del servidor',
+    detalle: process.env.NODE_ENV === 'development' ? err.message : undefined
+  })
+})
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`)

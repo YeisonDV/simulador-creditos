@@ -1,5 +1,10 @@
 const supabase = require('../config/supabase')
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+if (!emailRegex.test(email)) {
+  return res.status(400).json({ error: 'Formato de email inválido' })
+}
+
 const registro = async (req, res) => {
   try {
     const {

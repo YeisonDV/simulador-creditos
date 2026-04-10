@@ -72,4 +72,19 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { registro, login }
+const obtenerPerfil = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*, roles(nombre)')
+      .eq('id', req.user.id)
+      .single()
+
+    if (error) throw error
+    res.json(data)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { registro, login, obtenerPerfil}

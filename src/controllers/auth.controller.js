@@ -1,5 +1,23 @@
 const supabase = require('../config/supabase')
 
+const actualizarPerfil = async (req, res) => {
+  try {
+    const { ingresos_mensuales, deudas_actuales, historial_pago_score, telefono } = req.body
+
+    const { data, error } = await supabase
+      .from('usuarios')
+      .update({ ingresos_mensuales, deudas_actuales, historial_pago_score, telefono, updated_at: new Date() })
+      .eq('id', req.user.id)
+      .select()
+      .single()
+
+    if (error) throw error
+    res.json({ mensaje: 'Perfil actualizado correctamente', data })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 if (!emailRegex.test(email)) {
   return res.status(400).json({ error: 'Formato de email inválido' })
@@ -87,4 +105,4 @@ const obtenerPerfil = async (req, res) => {
   }
 }
 
-module.exports = { registro, login, obtenerPerfil}
+module.exports = { registro, login, obtenerPerfil, actualizarPerfil}

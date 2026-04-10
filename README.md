@@ -148,6 +148,8 @@ Authorization: Bearer token
 | GET | `/api/admin/reporte` | Reporte agregado de todas las solicitudes |
 | PATCH | `/api/admin/productos/:id` | Actualizar producto de crédito |
 | PATCH | `/api/admin/usuarios/:id/rol` | Cambiar rol de un usuario |
+| GET  | `/api/auth/perfil`   | Usuario | Ver mi perfil completo |
+| PATCH | `/api/auth/perfil`  | Usuario | Actualizar datos financieros |
 
 ---
 

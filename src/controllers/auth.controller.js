@@ -5,6 +5,10 @@ if (!emailRegex.test(email)) {
   return res.status(400).json({ error: 'Formato de email inválido' })
 }
 
+if (password.length < 6) {
+  return res.status(400).json({ error: 'La contraseña debe tener mínimo 6 caracteres' })
+}
+
 const registro = async (req, res) => {
   try {
     const {

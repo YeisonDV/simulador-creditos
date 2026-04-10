@@ -100,19 +100,28 @@ const crearSolicitud = async (req, res) => {
 // GET /api/solicitudes — listar mis solicitudes
 const obtenerMisSolicitudes = async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { page = 1, limit = 10, estado } = req.query
+    const desde = (page - 1) * limit
+    const hasta = desde + limit - 1
+
+    let query = supabase
       .from('solicitudes_credito')
       .select(`
         id, monto_solicitado, plazo_meses, estado,
         score_riesgo, nivel_riesgo, created_at,
         productos_credito (nombre, tipo),
         analisis_riesgo (cuota_calculada, total_intereses)
-      `)
+      `, { count: 'exact' })
       .eq('usuario_id', req.user.id)
       .order('created_at', { ascending: false })
+      .range(desde, hasta)
 
+    if (estado) query = query.eq('estado', estado)
+
+    const { data, error, count } = await query
     if (error) throw error
-    res.json(data)
+
+    res.json({ total: count, pagina: parseInt(page), solicitudes: data })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

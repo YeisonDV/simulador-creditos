@@ -5,5 +5,6 @@ const { verificarToken } = require('../middleware/auth')
 router.post('/registro', registro)
 router.post('/login',    login)
 router.get('/perfil', verificarToken, obtenerPerfil)
+router.put('/perfil', verificarToken, actualizarPerfil)
 
 module.exports = router

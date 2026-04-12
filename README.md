@@ -182,3 +182,6 @@ El servicio `credito.service.js` implementa:
 ## Enlace al sistema desplegado
 
 🔗 Pendiente — Railway (próximamente)
+
+## Fecha de entrega
+Proyecto desarrollado en el trimestre 2026-1

@@ -1,32 +1,5 @@
 const supabase = require('../config/supabase')
 
-const actualizarPerfil = async (req, res) => {
-  try {
-    const { ingresos_mensuales, deudas_actuales, historial_pago_score, telefono } = req.body
-
-    const { data, error } = await supabase
-      .from('usuarios')
-      .update({ ingresos_mensuales, deudas_actuales, historial_pago_score, telefono, updated_at: new Date() })
-      .eq('id', req.user.id)
-      .select()
-      .single()
-
-    if (error) throw error
-    res.json({ mensaje: 'Perfil actualizado correctamente', data })
-  } catch (err) {
-    res.status(500).json({ error: err.message })
-  }
-}
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-if (!emailRegex.test(email)) {
-  return res.status(400).json({ error: 'Formato de email inválido' })
-}
-
-if (password.length < 6) {
-  return res.status(400).json({ error: 'La contraseña debe tener mínimo 6 caracteres' })
-}
-
 const registro = async (req, res) => {
   try {
     const {
@@ -39,6 +12,13 @@ const registro = async (req, res) => {
     }
     if (!ingresos_mensuales || ingresos_mensuales <= 0) {
       return res.status(400).json({ error: 'Los ingresos mensuales deben ser mayores a 0' })
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Formato de email inválido' })
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'La contraseña debe tener mínimo 6 caracteres' })
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -105,4 +85,28 @@ const obtenerPerfil = async (req, res) => {
   }
 }
 
-module.exports = { registro, login, obtenerPerfil, actualizarPerfil}
+const actualizarPerfil = async (req, res) => {
+  try {
+    const { ingresos_mensuales, deudas_actuales, historial_pago_score, telefono } = req.body
+
+    const { data, error } = await supabase
+      .from('usuarios')
+      .update({
+        ingresos_mensuales,
+        deudas_actuales,
+        historial_pago_score,
+        telefono,
+        updated_at: new Date()
+      })
+      .eq('id', req.user.id)
+      .select()
+      .single()
+
+    if (error) throw error
+    res.json({ mensaje: 'Perfil actualizado correctamente', data })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { registro, login, obtenerPerfil, actualizarPerfil }
